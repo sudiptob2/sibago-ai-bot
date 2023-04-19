@@ -42,7 +42,6 @@ user_semaphores = {}
 HELP_MESSAGE = """Commands:
 ⚪ /retry – Regenerate last bot answer
 ⚪ /new – Start new dialog
-⚪ /mode – Select chat mode
 ⚪ /balance – Show balance
 ⚪ /help – Show help
 """
@@ -78,7 +77,7 @@ async def start_handle(update: Update, context: CallbackContext):
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
     db.start_new_dialog(user_id)
     
-    reply_text = "Hi! I'm <b>ChatGPT</b> bot implemented with GPT-3.5 OpenAI API 🤖\n\n"
+    reply_text = "Welcome to <b>ሲባጎ Sibago AI,</b> a super assistant powered by ChatGPT 🤖\n\n"
     reply_text += HELP_MESSAGE
 
     reply_text += "\nAnd now... ask me anything!"
@@ -328,12 +327,13 @@ async def show_balance_handle(update: Update, context: CallbackContext):
     price_per_1000_tokens = config.chatgpt_price_per_1000_tokens if config.use_chatgpt_api else config.gpt_price_per_1000_tokens
     n_spent_dollars = n_used_tokens * (price_per_1000_tokens / 1000)
 
-    text = f"You spent <b>{n_spent_dollars:.03f}$</b>\n"
-    text += f"You used <b>{n_used_tokens}</b> tokens\n\n"
+    # text = f"You spent <b>{n_spent_dollars:.03f}$</b>\n"
+    # text += f"You used <b>{n_used_tokens}</b> tokens\n\n"
 
-    text += "🏷️ Prices\n"
-    text += f"<i>- ChatGPT: {price_per_1000_tokens}$ per 1000 tokens\n"
-    text += f"- Whisper (voice recognition): {config.whisper_price_per_1_min}$ per 1 minute</i>"
+    text = "🏷️ Prices\n"
+    text += "<b>Free Plan</b>\n"
+    # text += f"<i>- ChatGPT: {price_per_1000_tokens}$ per 1000 tokens\n"
+    # text += f"- Whisper (voice recognition): {config.whisper_price_per_1_min}$ per 1 minute</i>"
 
     await update.message.reply_text(text, parse_mode=ParseMode.HTML)
 
@@ -371,7 +371,6 @@ async def error_handle(update: Update, context: CallbackContext) -> None:
 async def post_init(application: Application):
     await application.bot.set_my_commands([
         BotCommand("/new", "Start new dialog"),
-        BotCommand("/mode", "Select chat mode"),
         BotCommand("/retry", "Re-generate response for previous query"),
         BotCommand("/balance", "Show balance"),
         BotCommand("/help", "Show help message"),
